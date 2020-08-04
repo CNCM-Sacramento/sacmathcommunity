@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<!-- 
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+  
+-->
+<html>
+  <head>
+    <title>Home</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <link rel="icon" href="../images/logocrop.png" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+  </head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Header -->
+      <header id="header">
+        <!-- Nav -->
+        <nav>
+          <ul>
+            <li><a href="#menu">Menu</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <!-- Menu -->
+
+      <nav id="menu">
+        <h2>Menu</h2>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a id="login" href="login.html">Login/Sign Up</a></li>
+          <li><a id="contest" href="contest1.html" style="display:none">Contest</a></li>
+          <li><a href="leaderboard.html">Leaderboard</a></li>
+          <li><a href="rules.html">Rules</a></li>
+          <li><a href="archive.html">Archive</a></li>
+          <li><a href="hof.html">Hall of Fame</a></li>
+          <li><a id="profile" href="profile.html" style="display:none">Your Profile</a></li>
+          <li><a href="../index.html"><i class="	fas fa-angle-left" style="font-size:18px"></i><b style="font-size:22px; margin-left:8px">Back</b></a></li>
+        </ul>
+      </nav>
+      <!-- Main -->
+      <div id="main">
+        <div class="inner" >
+          <header>
+            <style>
+              h2.inner {letter-spacing: 2px;}
+            </style>
+            
+            <h1>Archive</h1>
+            <p style="display: inline; margin-right: 75px"><b style="font-size: 20px">Round 1</b></p> <a href="..\pdfs\Problems_R1.pdf", style="margin-right: 75px">Problems</a> <a href="..\pdfs\Solutions_R1.pdf">Solutions</a>
+            <h2 style = "display: block; padding-top: 100px">
+              Past Leaderboards
+            </h2>
+            
+            <select name="rounds" id="rounds" onchange="changeTable(this)">
+
+            </select>
+            
+            <div id="myDynamicTable2"></div>
+          
+          </header>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer id="footer">
+        <div class="inner">
+          <section>
+            <h2>Get in touch</h2>
+            <form method="post" action="#">
+              <div class="fields">
+                <div class="field half">
+                  <input type="text" name="name" id="name" placeholder="Name" />
+                </div>
+                <div class="field half">
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    placeholder="Email"
+                  />
+                </div>
+                <div class="field">
+                  <textarea
+                    name="message"
+                    id="message"
+                    placeholder="Message"
+                  ></textarea>
+                </div>
+              </div>
+              <ul class="actions">
+                <li><input type="submit" value="Send" class="primary" /></li>
+              </ul>
+            </form>
+          </section>
+          <section>
+            <h2>Follow</h2>
+            <ul class="icons">
+              <li><a href="mailto:cncmathgroup@gmail.com" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>
+            </ul>
+          </section>
+          <ul class="copyright">
+            <li>&copy; CNCM. All rights reserved</li>
+            <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+          </ul>
+        </div>
+      </footer>
+    </div>
+
+
+  <!-- Scripts -->
+  <script src="../assets/js/jquery.min.js"></script>
+  <script src="../assets/js/browser.min.js"></script>
+  <script src="../assets/js/breakpoints.min.js"></script>
+  <script src="../assets/js/util.js"></script>
+  <script src="../assets/js/main.js"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-auth.js"></script>
+
+<!-- Initialize Firebase -->
+<script src="/__/firebase/init.js"></script>
+
+<script>
+ var scorersTable = [];
+  var round;
+  
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // User is signed in.
+      var displayName = user.displayName;
+      var email = user.email;
+      var emailVerified = user.emailVerified;
+      var photoURL = user.photoURL;
+      var isAnonymous = user.isAnonymous;
+      var currentUserId = user.uid;
+      var providerData = user.providerData;
+      
+      if (emailVerified) {
+        document.getElementById("login").style.display = "none"
+        document.getElementById("profile").style.display = "list-item"
+        document.getElementById("contest").style.display = "list-item"
+      }
+      // ...
+    } else {
+      // User is signed out.  
+    }
+
+    let snapshot = firebase.database().ref("Contest/round").once("value").then(snapshot => {
+      let roundnumber = snapshot.val();
+      
+      for (var i = 1; i < roundnumber; i++) {
+        let text = "Round"+i;
+        let text2 = "Round " + i;
+        var x = document.getElementById("rounds");
+        var option = document.createElement("option");
+        option.text = text2;
+        option.value = text;
+        x.add(option);
+      }
+      
+    })
+    
+    async function initTable () {
+        await getScores("Round1");
+        createTable();
+    }
+    
+    initTable();
+  });
+  
+  
+  async function changeTable(selection) {
+      var val = selection.value;
+    
+      scorersTable = [];
+    var table = document.getElementById("myDynamicTable2");
+    table.innerHTML = "";
+    
+    await getScores(val);
+    createTable();
+    
+  }
+  
+  
+  async function getScores(theround) {
+      var email = "";
+      var name = "";
+
+    await firebase.database().ref("Competitors/" + theround).once("value").then(function(questionsSnapshot) {
+        var userId;
+    
+        questionsSnapshot.forEach(function(questionSnapshot) {
+          userId = questionSnapshot.key;
+          var name = questionSnapshot.child("name").val();
+
+          var score = [0,0,0,0,0,0,0]
+          var userscore = 0;
+          
+          //placehold is 1 to avoid divide by 0
+          for (let n = 1; n < 8; n++) {
+            score[n-1] = questionSnapshot.child("q" + n.toString() + "/Score").val();
+
+            if (score[n-1] == null) {
+              score[n-1] = 0
+            }
+
+            userscore += score[n-1]
+          }
+
+          scorersTable.push({name: name, score: score, totalscore: userscore, userid: userId});
+        });
+      });
+    }
+
+    function createTable() {
+
+
+      scorersTable.sort((a,b) => (a.totalscore < b.totalscore) ? 1 : -1);
+      var myTableDiv = document.getElementById("myDynamicTable2");
+
+      var table = document.createElement('TABLE');
+      table.border = '1';
+
+      var tableBody = document.createElement('TBODY');
+      table.appendChild(tableBody);
+
+      for (var i = 0; i < scorersTable.length + 1; i++) {
+        var tr = document.createElement('TR');
+        tableBody.appendChild(tr);
+
+        if (i == 0) {
+          var td = document.createElement('TD');
+
+          td.width = '20';
+          td.appendChild(document.createTextNode("Rank"));
+          tr.appendChild(td)
+
+          td = document.createElement('TD');
+          td.width = '75';
+          td.appendChild(document.createTextNode("Username"));
+          tr.appendChild(td)
+
+          td = document.createElement('TD');
+          td.width = '75';
+          td.appendChild(document.createTextNode("Total"));
+          tr.appendChild(td)
+
+          td = document.createElement('TD');
+          td.width = '75';
+          td.appendChild(document.createTextNode("P1"));
+          tr.appendChild(td)
+
+          td = document.createElement('TD');
+          td.width = '75';
+          td.appendChild(document.createTextNode("P2"));
+          tr.appendChild(td)
+
+          td = document.createElement('TD');
+          td.width = '75';
+          td.appendChild(document.createTextNode("P3"));
+          tr.appendChild(td)
+
+          td = document.createElement('TD');
+          td.width = '75';
+          td.appendChild(document.createTextNode("P4"));
+          tr.appendChild(td)
+
+          td = document.createElement('TD');
+          td.width = '75';
+          td.appendChild(document.createTextNode("P5"));
+          tr.appendChild(td)
+
+          td = document.createElement('TD');
+          td.width = '75';
+          td.appendChild(document.createTextNode("P6"));
+          tr.appendChild(td)
+
+          td = document.createElement('TD');
+          td.width = '75';
+          td.appendChild(document.createTextNode("P7"));
+          tr.appendChild(td)
+        } else {
+          for (var j = 0; j < 10; j++) {
+            var td = document.createElement('TD');
+            td.width = '75';
+            if (j == 0) {
+              td.width = '20';
+              td.appendChild(document.createTextNode(i));
+            } else if (j == 1) {
+              td.appendChild(document.createTextNode(scorersTable[i-1].name));
+            } else if (j == 2) {
+              td.style.fontWeight = "900";
+              td.appendChild(document.createTextNode(scorersTable[i-1].totalscore));
+            } else {
+              td.appendChild(document.createTextNode(scorersTable[i-1].score[j-3]));
+            }
+            tr.appendChild(td);
+          }
+          
+      myTableDiv.appendChild(table)
+    }
+      }
+    }
+</script>
+  <script src="submit.js"></script>
+      </body>
+</html>
