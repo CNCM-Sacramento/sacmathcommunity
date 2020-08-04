@@ -122,9 +122,21 @@
 <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-auth.js"></script>
 
 <!-- Initialize Firebase -->
-<script src="/__/firebase/init.js"></script>
+
 
 <script>
+var firebaseConfig = {
+    apiKey: "AIzaSyDA1sAitEBh-lA3TVcSev1e_gOsyK0mEh4",
+    authDomain: "sac-website-8f3d4.firebaseapp.com",
+    databaseURL: "https://sac-website-8f3d4.firebaseio.com",
+    projectId: "sac-website-8f3d4",
+    storageBucket: "sac-website-8f3d4.appspot.com",
+    messagingSenderId: "327118864351",
+    appId: "1:327118864351:web:ceed2ca346ce965c250e6a",
+    measurementId: "G-FE8Q8ERTYW"
+  };
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       // User is signed in.

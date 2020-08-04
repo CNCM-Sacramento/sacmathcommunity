@@ -200,9 +200,21 @@
         <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-auth.js"></script>
 
         <!-- Initialize Firebase -->
-        <script src="/__/firebase/init.js"></script>
+        
 
         <script>
+		var firebaseConfig = {
+			apiKey: "AIzaSyDA1sAitEBh-lA3TVcSev1e_gOsyK0mEh4",
+			authDomain: "sac-website-8f3d4.firebaseapp.com",
+			databaseURL: "https://sac-website-8f3d4.firebaseio.com",
+			projectId: "sac-website-8f3d4",
+			storageBucket: "sac-website-8f3d4.appspot.com",
+			messagingSenderId: "327118864351",
+			appId: "1:327118864351:web:ceed2ca346ce965c250e6a",
+			measurementId: "G-FE8Q8ERTYW"
+		};
+		// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
             // Setvar startDate = new Date("June 13var startDate = new Date("June 13 the date we're counting down to
             var startDate = new Date("July 01, 2020 14:00:00").getTime();
             var countDownDate = new Date("July 01, 2020 15:00:00").getTime();
