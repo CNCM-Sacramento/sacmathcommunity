@@ -36,7 +36,7 @@
         <h2>Menu</h2>
         <ul>
           <li><a href="index.html">Home</a></li>
-          <li><a id="contest" href="contest1.html" style="display:none">Contest</a></li>
+          <li><a href="contest1.html">Contest</a></li>
           <li><a href="leaderboard.html">Leaderboard</a></li>
           <li><a href="rules.html">Rules</a></li>
           <li><a href="archive.html">Archive</a></li>
@@ -53,7 +53,7 @@
             </style>
             
             <h1 id="title">Welcome to SARML!</h1>
-            <h2 class="inner">SARML will begin on (whatever day we decide)</h2>
+            <h2 class="inner">SARML will begin on September 14, 2020, at 10 AM PST.</h2>
             <p>If you are a newcomer, sign up by opening the menu bar on the top right corner, and clicking Sign-Up. Detailed rules and information are also contained in the menu bar.</p>
           </header>
         </div>
@@ -112,53 +112,7 @@
   <script src="../assets/js/util.js"></script>
   <script src="../assets/js/main.js"></script>
 
-  <!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-database.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-auth.js"></script>
 
-<!-- Initialize Firebase -->
-
-
-<script>
-var firebaseConfig = {
-    apiKey: "AIzaSyDA1sAitEBh-lA3TVcSev1e_gOsyK0mEh4",
-    authDomain: "sac-website-8f3d4.firebaseapp.com",
-    databaseURL: "https://sac-website-8f3d4.firebaseio.com",
-    projectId: "sac-website-8f3d4",
-    storageBucket: "sac-website-8f3d4.appspot.com",
-    messagingSenderId: "327118864351",
-    appId: "1:327118864351:web:ceed2ca346ce965c250e6a",
-    measurementId: "G-FE8Q8ERTYW"
-  };
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-      // User is signed in.
-      var displayName = user.displayName;
-      var email = user.email;
-      var emailVerified = user.emailVerified;
-      var photoURL = user.photoURL;
-      var isAnonymous = user.isAnonymous;
-      var currentUserId = user.uid;
-      var providerData = user.providerData;
-      
-      if (emailVerified) {
-        document.getElementById("login").style.display = "none"
-        document.getElementById("profile").style.display = "list-item"
-        document.getElementById("contest").style.display = "list-item"
-      }
-
-      firebase.database().ref("Users/"+currentUserId).update({email: user.email});
-      // ...
-    } else {
-      // User is signed out.  
-    }
-  });
-</script>
   <script src="submit.js"></script>
       </body>
 </html>
