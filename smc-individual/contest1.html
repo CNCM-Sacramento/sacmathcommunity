@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="../assets/css/main.css" />
     <noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
   </head>
-  <body class="is-preload" onload="display()">
+  <body class="is-preload">
     <!-- Wrapper -->
     <div id="wrapper">
       <!-- Header -->
@@ -46,20 +46,16 @@
       <div id="main">
         <div class="inner" >
           <header>
-            <h1>Rules</h1>
-            <ul>
-              <li><b>Contest</b></li>
-                <ul>
-                  <li>SARML is Sacramento Math Community's mock ARML, or American Regions Math League.</li>
-                  <li>The competition is individual, with problems being presented in pairs, with each pair being completed in 10 minutes.</li>
-                  <li>Problem difficulty ranges from AMC to olympiad level</li>
-                  <li>The only resources allowed are writing utensils, paper, a compass, and a ruler</li>
-                  <li>We reserve the right to disqualify any competitor suspected of cheating from the contest</li>
-				  <li>Each answer is an integer</li>
-                </ul>
+            <style>
+              h2.inner {letter-spacing: 2px;}
+            </style>
+            
+            <h1 id="title">Welcome to SMC Individual!</h1>
           </header>
         </div>
       </div>
+
+<script src="https://static.airtable.com/js/embed/embed_snippet_v1.js"></script><iframe class="airtable-embed airtable-dynamic-height" src="https://airtable.com/embed/shra89Hnm30fJXVc0?backgroundColor=orange" frameborder="0" onmousewheel="" width="100%" height="983" style="background: transparent; border: 1px solid #ccc;"></iframe>
 
       <!-- Footer -->
       <footer id="footer">
@@ -114,66 +110,8 @@
   <script src="../assets/js/util.js"></script>
   <script src="../assets/js/main.js"></script>
 
-  <!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-database.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-auth.js"></script>
 
-<!-- Initialize Firebase -->
-
-
-<script>
-var firebaseConfig = {
-    apiKey: "AIzaSyDA1sAitEBh-lA3TVcSev1e_gOsyK0mEh4",
-    authDomain: "sac-website-8f3d4.firebaseapp.com",
-    databaseURL: "https://sac-website-8f3d4.firebaseio.com",
-    projectId: "sac-website-8f3d4",
-    storageBucket: "sac-website-8f3d4.appspot.com",
-    messagingSenderId: "327118864351",
-    appId: "1:327118864351:web:ceed2ca346ce965c250e6a",
-    measurementId: "G-FE8Q8ERTYW"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  firebase.auth().onAuthStateChanged(function(user) {
-    
-    if (user) {
-      // User is signed in.
-      var displayName = user.displayName;
-      var email = user.email;
-      var emailVerified = user.emailVerified;
-      var photoURL = user.photoURL;
-      var isAnonymous = user.isAnonymous;
-      currentUserId = user.uid;
-      var providerData = user.providerData;
-      
-      if (emailVerified) {
-        document.getElementById("login").style.display = "none"
-        document.getElementById("profile").style.display = "list-item"
-        document.getElementById("contest").style.display = "list-item"
-      }
-      // ...
-    } else {
-      // User is signed out.  
-    }
-  });
-
-  function display() {
-    var tr = document.getElementById("pointRow")
-    
-    firebase.database().ref("Contest/pointValues").once("value").then(function(snapshot) {
-      var pointArray = snapshot.val()
-      
-      for (let n = 0; n < 7; n++) {
-        var td = document.createElement('TD')
-        td.appendChild(document.createTextNode(pointArray[n].toString()))
-        tr.appendChild(td)
-      }
-    })
-  }
-  </script>
   <script src="submit.js"></script>
       </body>
 </html>
+
