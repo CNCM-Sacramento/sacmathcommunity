@@ -40,10 +40,9 @@
           <li><a href="leaderboard.html">Leaderboard</a></li>
           <li><a href="rules.html">Rules</a></li>
           <li><a href="archive.html">Archive</a></li>
-          <li><a href="hof.html">Hall of Fame</a></li>
           <li><a href="../index.html"><i class="	fas fa-angle-left" style="font-size:18px"></i><b style="font-size:22px; margin-left:8px">Back</b></a></li>
         </ul>
-      </nav>in -->
+      </nav>
       <div id="main">
         <div class="inner" >
           <header>
@@ -53,15 +52,7 @@
             
             <h1>Archive</h1>
             <p style="display: inline; margin-right: 75px"><b style="font-size: 20px">Nothing... yet!</b></p> 
-            <h2 style = "display: block; padding-top: 100px">
-              Past Scores
-            </h2>
-            
-            <select name="rounds" id="rounds" onchange="changeTable(this)">
 
-            </select>
-            
-            <div id="myDynamicTable2"></div>
           
           </header>
         </div>
@@ -120,209 +111,7 @@
   <script src="../assets/js/util.js"></script>
   <script src="../assets/js/main.js"></script>
 
-  <!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-database.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-auth.js"></script>
 
-<!-- Initialize Firebase -->
-
-<script>
-var firebaseConfig = {
-    apiKey: "AIzaSyDA1sAitEBh-lA3TVcSev1e_gOsyK0mEh4",
-    authDomain: "sac-website-8f3d4.firebaseapp.com",
-    databaseURL: "https://sac-website-8f3d4.firebaseio.com",
-    projectId: "sac-website-8f3d4",
-    storageBucket: "sac-website-8f3d4.appspot.com",
-    messagingSenderId: "327118864351",
-    appId: "1:327118864351:web:ceed2ca346ce965c250e6a",
-    measurementId: "G-FE8Q8ERTYW"
-  };
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
- var scorersTable = [];
-  var round;
-  
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-      // User is signed in.
-      var displayName = user.displayName;
-      var email = user.email;
-      var emailVerified = user.emailVerified;
-      var photoURL = user.photoURL;
-      var isAnonymous = user.isAnonymous;
-      var currentUserId = user.uid;
-      var providerData = user.providerData;
-      
-      if (emailVerified) {
-        document.getElementById("login").style.display = "none"
-        document.getElementById("profile").style.display = "list-item"
-        document.getElementById("contest").style.display = "list-item"
-      }
-      // ...
-    } else {
-      // User is signed out.  
-    }
-
-    let snapshot = firebase.database().ref("Contest/round").once("value").then(snapshot => {
-      let roundnumber = snapshot.val();
-      
-      for (var i = 1; i < roundnumber; i++) {
-        let text = "Round"+i;
-        let text2 = "Round " + i;
-        var x = document.getElementById("rounds");
-        var option = document.createElement("option");
-        option.text = text2;
-        option.value = text;
-        x.add(option);
-      }
-      
-    })
-    
-    async function initTable () {
-        await getScores("Round1");
-        createTable();
-    }
-    
-    initTable();
-  });
-  
-  
-  async function changeTable(selection) {
-      var val = selection.value;
-    
-      scorersTable = [];
-    var table = document.getElementById("myDynamicTable2");
-    table.innerHTML = "";
-    
-    await getScores(val);
-    createTable();
-    
-  }
-  
-  
-  async function getScores(theround) {
-      var email = "";
-      var name = "";
-
-    await firebase.database().ref("Competitors/" + theround).once("value").then(function(questionsSnapshot) {
-        var userId;
-    
-        questionsSnapshot.forEach(function(questionSnapshot) {
-          userId = questionSnapshot.key;
-          var name = questionSnapshot.child("name").val();
-
-          var score = [0,0,0,0,0,0,0]
-          var userscore = 0;
-          
-          //placehold is 1 to avoid divide by 0
-          for (let n = 1; n < 8; n++) {
-            score[n-1] = questionSnapshot.child("q" + n.toString() + "/Score").val();
-
-            if (score[n-1] == null) {
-              score[n-1] = 0
-            }
-
-            userscore += score[n-1]
-          }
-
-          scorersTable.push({name: name, score: score, totalscore: userscore, userid: userId});
-        });
-      });
-    }
-
-    function createTable() {
-
-
-      scorersTable.sort((a,b) => (a.totalscore < b.totalscore) ? 1 : -1);
-      var myTableDiv = document.getElementById("myDynamicTable2");
-
-      var table = document.createElement('TABLE');
-      table.border = '1';
-
-      var tableBody = document.createElement('TBODY');
-      table.appendChild(tableBody);
-
-      for (var i = 0; i < scorersTable.length + 1; i++) {
-        var tr = document.createElement('TR');
-        tableBody.appendChild(tr);
-
-        if (i == 0) {
-          var td = document.createElement('TD');
-
-          td.width = '20';
-          td.appendChild(document.createTextNode("Rank"));
-          tr.appendChild(td)
-
-          td = document.createElement('TD');
-          td.width = '75';
-          td.appendChild(document.createTextNode("Username"));
-          tr.appendChild(td)
-
-          td = document.createElement('TD');
-          td.width = '75';
-          td.appendChild(document.createTextNode("Total"));
-          tr.appendChild(td)
-
-          td = document.createElement('TD');
-          td.width = '75';
-          td.appendChild(document.createTextNode("P1"));
-          tr.appendChild(td)
-
-          td = document.createElement('TD');
-          td.width = '75';
-          td.appendChild(document.createTextNode("P2"));
-          tr.appendChild(td)
-
-          td = document.createElement('TD');
-          td.width = '75';
-          td.appendChild(document.createTextNode("P3"));
-          tr.appendChild(td)
-
-          td = document.createElement('TD');
-          td.width = '75';
-          td.appendChild(document.createTextNode("P4"));
-          tr.appendChild(td)
-
-          td = document.createElement('TD');
-          td.width = '75';
-          td.appendChild(document.createTextNode("P5"));
-          tr.appendChild(td)
-
-          td = document.createElement('TD');
-          td.width = '75';
-          td.appendChild(document.createTextNode("P6"));
-          tr.appendChild(td)
-
-          td = document.createElement('TD');
-          td.width = '75';
-          td.appendChild(document.createTextNode("P7"));
-          tr.appendChild(td)
-        } else {
-          for (var j = 0; j < 10; j++) {
-            var td = document.createElement('TD');
-            td.width = '75';
-            if (j == 0) {
-              td.width = '20';
-              td.appendChild(document.createTextNode(i));
-            } else if (j == 1) {
-              td.appendChild(document.createTextNode(scorersTable[i-1].name));
-            } else if (j == 2) {
-              td.style.fontWeight = "900";
-              td.appendChild(document.createTextNode(scorersTable[i-1].totalscore));
-            } else {
-              td.appendChild(document.createTextNode(scorersTable[i-1].score[j-3]));
-            }
-            tr.appendChild(td);
-          }
-          
-      myTableDiv.appendChild(table)
-    }
-      }
-    }
-</script>
   <script src="submit.js"></script>
       </body>
 </html>
